@@ -45,17 +45,26 @@ import com.android.settings.R;
 import com.android.settings.SettingsPreferenceFragment;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.settings.Utils;
+import org.aospextended.extensions.Utils;
 
 public class Notifications extends SettingsPreferenceFragment implements OnPreferenceChangeListener {
 
     private PreferenceCategory mLedsCategory;
     private Preference mChargingLeds;
+    private static final String INCALL_VIB_OPTIONS = "incall_vib_options";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         addPreferencesFromResource(R.xml.notifications);
+
+		PreferenceScreen prefScreen = getPreferenceScreen();
+
+		PreferenceCategory incallVibCategory = (PreferenceCategory) findPreference(INCALL_VIB_OPTIONS);
+        if (!Utils.isVoiceCapable(getActivity())) {
+            prefScreen.removePreference(incallVibCategory);
+        }
 
         final ContentResolver resolver = getActivity().getContentResolver();
         final PreferenceScreen prefSet = getPreferenceScreen();
